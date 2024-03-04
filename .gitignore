@@ -1,0 +1,10 @@
+.cproject
+.mxproject
+.project
+.settings/
+Debug/
+Drivers/
+STM32F401CBUX_FLASH.ld
+assembler_test Debug.launch
+assembler_test.ioc
+
