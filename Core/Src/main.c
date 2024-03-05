@@ -81,6 +81,10 @@ int main(void)
 
   /* USER CODE BEGIN SysInit */
 
+  // overwrite to achieve over clocking : be careful
+  //RCC_OscInitStruct.PLL.PLLM = 12;
+ // RCC_OscInitStruct.PLL.PLLN = 85;
+
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
@@ -95,20 +99,31 @@ int main(void)
 
 
   //ASM_Function();
- uint8_t spi_data = 0xAA;
+ uint32_t spi_data 	= 0xAA;
+ uint32_t read_data = 0x0;
+
 #define VAR_SIZE	9
 #define SHIFT_SIZE  (32-VAR_SIZE)
   while (1)
+
   {
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
      //ASM_spi_write_byte( (uint32_t) spi_data<<24);
     //  spi_data++;
-	 ASM_spi_write_var( (uint32_t) (spi_data<<SHIFT_SIZE), VAR_SIZE);
+//	  HAL_GPIO_WritePin(SCS_GPIO_Port, SCS_Pin, 0);
+	  ASM_spi_write_var( (uint32_t) (spi_data<<SHIFT_SIZE), VAR_SIZE);
+	  read_data = ASM_spi_read( (uint32_t) 16);
+
 	 spi_data++;
+//	  HAL_GPIO_WritePin(SCS_GPIO_Port, SCS_Pin, 1);
+//	 ASM_spi_write_var( (uint32_t) (spi_data<<SHIFT_SIZE), VAR_SIZE);
+//	 spi_data++;
 	  HAL_Delay(1000);
   }
+
+
   /* USER CODE END 3 */
 }
 
@@ -133,8 +148,8 @@ void SystemClock_Config(void)
   RCC_OscInitStruct.HSEState = RCC_HSE_ON;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
-  RCC_OscInitStruct.PLL.PLLM = 12;
-  RCC_OscInitStruct.PLL.PLLN = 85;
+  RCC_OscInitStruct.PLL.PLLM = 25;
+  RCC_OscInitStruct.PLL.PLLN = 180;
   RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
   RCC_OscInitStruct.PLL.PLLQ = 4;
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
@@ -172,16 +187,23 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOC_CLK_ENABLE();
   __HAL_RCC_GPIOH_CLK_ENABLE();
   __HAL_RCC_GPIOA_CLK_ENABLE();
+  __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOC, SDA_Pin|SCK_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOC, SDA_Pin|SCK_Pin|SCS_Pin, GPIO_PIN_RESET);
 
-  /*Configure GPIO pins : SDA_Pin SCK_Pin */
-  GPIO_InitStruct.Pin = SDA_Pin|SCK_Pin;
+  /*Configure GPIO pins : SDA_Pin SCK_Pin SCS_Pin */
+  GPIO_InitStruct.Pin = SDA_Pin|SCK_Pin|SCS_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : MISO_Pin */
+  GPIO_InitStruct.Pin = MISO_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(MISO_GPIO_Port, &GPIO_InitStruct);
 
 /* USER CODE BEGIN MX_GPIO_Init_2 */
 /* USER CODE END MX_GPIO_Init_2 */

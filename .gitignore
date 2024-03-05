@@ -2,6 +2,7 @@
 .mxproject
 .project
 .settings/
+'spi-bit-bash Debug.launch'
 Debug/
 Drivers/
 STM32F401CBUX_FLASH.ld
