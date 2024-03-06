@@ -114,7 +114,7 @@ int main(void)
     //  spi_data++;
 //	  HAL_GPIO_WritePin(SCS_GPIO_Port, SCS_Pin, 0);
 	  ASM_spi_write_var( (uint32_t) (spi_data<<SHIFT_SIZE), VAR_SIZE);
-	  read_data = ASM_spi_read( (uint32_t) 16);
+	  read_data = ASM_spi_read( (uint32_t) 8 , spi_data<<24);
 
 	 spi_data++;
 //	  HAL_GPIO_WritePin(SCS_GPIO_Port, SCS_Pin, 1);
