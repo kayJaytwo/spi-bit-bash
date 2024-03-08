@@ -31,22 +31,29 @@
   cmw_write_bit:
 	    STR R3,  [R2, #o_GPIO_BSRR]			// write SCK high and data on SDA
 
+#ifdef USE_DELAY
 	  LDR R3, =CLK_LOW_TIME			     // half the o time compared to offtime
   cmw_bit_delay1:
 	  SUBS R3, R3, #1                  	// R3 -1
 	  BNE cmw_bit_delay1                	// stay in loop delay1 if not equal to zero
-
+#else
+	  NOP								// supply some minimum low phase clock cycle
+	  NOP
+	  Nop
+	  NOP
+	  SUBS R1, R1, #1					// decrement the bit counter
+#endif
 	  LDR R3, =#(CLK_HIGH)				// set SCK low and keep data on SDA
 	  STR R3,  [R2, #o_GPIO_BSRR]
 
+#ifdef USE_DELAY
 	  LDR R3, =CLK_HIGH_TIME			//
   cmw_bit_delay2:
 	  SUBS R3, R3, #1                  // R3 -1
 	  BNE cmw_bit_delay2
+#endif
 
-	  SUBS R1, R1, #1					// decrement the bit counter
+
 	  BNE cmw_do_1_bit
 
 
-
-	//  BX LR                            // Return from function

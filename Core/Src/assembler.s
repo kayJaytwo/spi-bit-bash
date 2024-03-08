@@ -21,8 +21,8 @@
 	include the assembly files for each function
 	*/
 	#include "spi_read.s"
-	#include "asm_spi_write.s"
-	#include "asm_spi_write_fast.s"
+//	#include "asm_spi_write.s"
+//	#include "asm_spi_write_fast.s"
 	#include "asm_spi_write_var.s"
 //	#include "asm_spi_command_wr.s"
 

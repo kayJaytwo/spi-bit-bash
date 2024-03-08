@@ -1,5 +1,6 @@
 
-	  #define USE_CS 1					// enable CS
+
+
 	  #define WIRE3_SERIAL
 
 	  #ifdef WIRE3_SERIAL
@@ -53,21 +54,21 @@
 	  .equ   PERIPH_BASE,           0x40000000UL
 	  .equ   AHB1PERIPH_BASE,       (PERIPH_BASE + 0x00020000UL)
 
-	  .equ   GPIO_BASE,            (AHB1PERIPH_BASE + o_GPIOC)   //<- change port here
+	  .equ   GPIO_BASE,            (AHB1PERIPH_BASE + o_GPIOB)   //<- change port here
 	  .equ   GPIO_BSRR,            (GPIO_BASE + o_GPIO_BSRR)
 	  .equ   GPIO_MODER,           (GPIO_BASE + o_GPIO_MODER)
 	  .equ   GPIO_IDR,             (GPIO_BASE + o_GPIO_IDR)
 	  .equ   GPIO_PUPDR,           (GPIO_BASE + o_GPIO_PUPDR)
 
-	 .equ   SDA_MODE_pos,		26UL 							// SDA pin mode reg
-	 .equ 	SDA_pos,			13UL							// <- change data bit here
+
+	 .equ 	SDA_pos,			15UL							// <- change data bit here
 	 .equ	SCK_pos,			14UL							// <- change clock bit here
-	 .equ	SCS_pos,			15UL							// <- change chip sel bit here
+	 .equ	SCS_pos,			13UL							// <- change chip sel bit here
 	 .equ	SDC_pos,			12UL							// Data/Command CS DC pin PC12
 
-
-	  .equ  SDA_HIGH,				(0x1UL<< SDA_pos)     		// SDA pin Set
-	  .equ  SDA_LOW,				(0x1UL<<(16+SDA_pos))  		// SDA pin Clr
+	 .equ   SDA_MODE_pos,			(0x1UL<<(SDA_pos))  			// SDA pin mode reg
+	  .equ  SDA_HIGH,				(0x1UL<< (SDA_pos))     		// SDA pin Set
+	  .equ  SDA_LOW,				(0x1UL<<(16+SDA_pos))  		    // SDA pin Clr
 	  .equ  CLK_LOW, 				(0x1UL<<(16+SCK_pos))
 	  .equ  CLK_HIGH, 				(0x1UL<<(SCK_pos))
 
@@ -77,9 +78,11 @@
 	  .equ  SDC_LOW, 				(0x1UL<<(16+SDC_pos))
 	  .equ  SDC_HIGH, 				(0x1UL<<(SDC_pos))
 
-	  .equ  SDA_OUT,				(0x01UL<<(SDA_MODE_pos))
-	  .equ  SDA_IN,				    (0x00UL<<(SDA_MODE_pos))
-	  .equ  SDA_MODE_mask_pos,		(0xF3FFFFFF)
+	  .equ  SDA_OUT,				0x40000000
+	  .equ  SDA_IN,				    0x00
+	  .equ  SDA_MODE_mask_neg,		~(0x3<<(SDA_pos<<1))
+	  .equ  SDA_MODE_pullup_neg,	~(0x3<<(SDA_pos<<1))
+	  .equ  SDA_MODE_pullup,		(0x1<<(SDA_pos<<1))
 	  .equ  PULLUP,					(0x01UL<<26)
 	  .equ  PULLDWN,				(0x10UL<<26)
 
@@ -96,7 +99,9 @@
 	  /
 	  /--------------------------------------------------------------*/
 
-
+	//#define USE_DELAY   1				// enable delay loop to extend period
+	#define USE_CS 		1					// enable CS
+	//#define PULLUP_ON   1				// enable pullup
 
 
 

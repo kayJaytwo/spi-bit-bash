@@ -42,41 +42,49 @@
 
 	  // get the current gpio mode and set SDA pin to input
 	  LDR R3, [R2, #o_GPIO_MODER]			// read mode reg
-	  AND R3, #(SDA_MODE_mask_pos)			// modify no need to OR in the pin bits as they are 0x00
+	  AND R3, #(SDA_MODE_mask_neg)			// modify no need to OR in the pin bits as they are 0x00
 	  STR R3, [R2, #o_GPIO_MODER]			// write
 
 
 	  // temp use pull up
 #ifdef PULLUP_ON
 	   LDR R3, [R2, #o_GPIO_PUPDR]
- 	   ORR R3, =#(0x08000000)
+	   AND R3, #(SDA_MODE_pullup_neg)
+ 	   ORR R3, #(SDA_MODE_pullup)
  	   STR R3, [R2, #o_GPIO_PUPDR]
 #endif
 
-	LDR R0,=#0							// Clear,  rx data register
 
  loopA:
 
 	  LDR R3,  =#(CLK_LOW)				//Start low clock cycle
 	  STR R3, [R2, #o_GPIO_BSRR]		// write SCK low
 
+
+#ifdef USE_DELAY
 	  LDR R3, =CLK_LOW_TIME				// the low clock  time delay loop
  bit_delay14:
 	  SUBS R3, R3, #1                  	// R3 -1
 	  BNE bit_delay14                	// stay in loop delay1 if not equal to zero
-
+#else
+	NOP
+	NOP
+	NOP
+#endif
 	  LDR R3, =#(CLK_HIGH)				// set SCK high
-	  STR R3, [R2, #o_GPIO_BSRR]
-
+	  STR R3, [R2, #o_GPIO_BSRR]		// Set clk high
 
 	  LDR  R3, [R2, #o_GPIO_IDR]	 	// read input on gpio port
 	  ASR  R3, #(SDA_pos+1)				// shift  data bit right into carry bit
 	  ADC  R0, #0						// add carry into rx data word
 
+#ifdef USE_DELAY
 	  LDR R3, =CLK_HIGH_TIME			//
  bit_delay24:
 	  SUBS R3, R3, #1                   // R3 -1
 	  BNE bit_delay24
+
+#endif
 
 	  SUBS R4, R4, #1					// dec bit count
 	  BEQ  exit							// exit loop on zero bit count
