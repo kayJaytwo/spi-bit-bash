@@ -99,7 +99,7 @@ int main(void)
 
 
   //ASM_Function();
- uint32_t spi_command 	= 0x182;
+ uint32_t spi_command 	= 0x1AA;
 
  uint32_t read_data = 0x0;
 
@@ -114,14 +114,14 @@ int main(void)
      //ASM_spi_write_byte( (uint32_t) spi_data<<24);
     //  spi_data++;
 //	  HAL_GPIO_WritePin(SCS_GPIO_Port, SCS_Pin, 0);
-	  //ASM_spi_write_var( (uint32_t) (spi_data<<SHIFT_SIZE), VAR_SIZE);
-	  read_data = ASM_spi_read( spi_command, (uint32_t) 16);
+	  ASM_spi_write_var( (uint32_t) spi_command, VAR_SIZE);
+	 // read_data = ASM_spi_read( spi_command, (uint32_t) 16);
 
 	 spi_command++;
 //	  HAL_GPIO_WritePin(SCS_GPIO_Port, SCS_Pin, 1);
 //	 ASM_spi_write_var( (uint32_t) (spi_data<<SHIFT_SIZE), VAR_SIZE);
 //	 spi_data++;
-	  HAL_Delay(2000);
+	  HAL_Delay(1000);
   }
 
 

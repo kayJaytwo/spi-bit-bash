@@ -2,6 +2,7 @@
 .mxproject
 .project
 .settings/
+asm_spi/Src/asm_spi_write_var_org.s
 spi-bit-bash\ Debug.launch
 Debug/
 Drivers/
