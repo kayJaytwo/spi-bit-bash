@@ -10,12 +10,12 @@
 */
 ASM_spi_write_var:
 
-	  PUSH  {R5, R6 }
-	  MOV R2,#32
-	  SUB R2,R1
-	  LSL R0, R2     // align the data word size to the left msb bit
+PUSH  {R5, R6 }
+MOV R2,#32
+	SUB R2,R1
+  LSL R0, R2     // align the data word size to the left msb bit
 
-	  LDR R2,   =GPIO_BASE   // address of the GPIO port
+LDR R2,   =GPIO_BASE   // address of the GPIO port
       LDR R4,	=#(CLK_LOW | SDA_HIGH | SCS_LOW)			// preload clock low
       LDR R5,	=#(CLK_HIGH)
       LDR R6,	=#(CLK_LOW | SDA_LOW | SCS_LOW)
