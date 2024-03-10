@@ -60,5 +60,5 @@ bit_delay22:
 	  LDR R3, =#(SCS_HIGH | CLK_LOW )
 	  STR R3, [R2, #o_GPIO_BSRR]		// write SCK low and data on SDA
       POP  {R5, R6 }
-	  BX LR                            // Return from function
+	//  BX LR                            // Return from function
 
